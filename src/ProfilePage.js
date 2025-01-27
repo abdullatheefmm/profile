@@ -6,24 +6,22 @@ const ProfilePage = () => {
   const [user, setUser] = useState({
     name: '',
     email: '',
-    avatar: '/avatar.png', // Assuming the avatar.png is in the public folder
+    avatar: 'https://png.pngtree.com/png-clipart/20230927/original/pngtree-man-avatar-image-for-profile-png-image_13001877.png', // External image URL
   });
-  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Mock API Call to simulate fetching user data
+    // Simulating an API call to fetch user data
     setTimeout(() => {
-      // Simulate user data from the API
       setUser({
-        name: '',
-        email: '',
-        avatar: '/avatar.png', // Assuming the avatar.png is in the public folder
+        name: ' ',
+        email: ' ',
+        avatar: 'https://png.pngtree.com/png-clipart/20230927/original/pngtree-man-avatar-image-for-profile-png-image_13001877.png', // External image URL
       });
     }, 1000);
   }, []);
 
   const handleSubmit = (values, { setSubmitting }) => {
-    // Update user information on form submission
+    // Update user data on form submission
     setUser({
       ...user,
       name: values.name,
@@ -32,7 +30,6 @@ const ProfilePage = () => {
     setSubmitting(false);
   };
 
-  if (error) return <div>{error}</div>;
   if (!user) return <div>Loading...</div>;
 
   return (
@@ -42,9 +39,15 @@ const ProfilePage = () => {
         {/* Avatar Section */}
         <div className="avatar">
           {user.avatar ? (
-            <img src={user.avatar} alt="Avatar" />
+            <img
+              src={user.avatar}
+              alt="Avatar"
+              onError={(e) => (e.target.src = '/placeholder.png')} // Fallback if image fails to load
+            />
           ) : (
-            <div className="avatar-placeholder">{user.name[0]}</div> // Display first letter if no avatar
+            <div className="avatar-placeholder">
+              {user.name ? user.name[0] : '?'}
+            </div>
           )}
         </div>
 
@@ -60,11 +63,22 @@ const ProfilePage = () => {
             <Form>
               <div>
                 <label htmlFor="name">Name</label>
-                <Field id="name" name="name" placeholder="Enter your name" />
+                <Field
+                  id="name"
+                  name="name"
+                  placeholder="Enter your name"
+                  required
+                />
               </div>
               <div>
                 <label htmlFor="email">Email</label>
-                <Field id="email" name="email" placeholder="Enter your email" type="email" />
+                <Field
+                  id="email"
+                  name="email"
+                  placeholder="Enter your email"
+                  type="email"
+                  required
+                />
               </div>
               <button type="submit" disabled={isSubmitting}>
                 Update
